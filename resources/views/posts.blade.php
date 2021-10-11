@@ -32,82 +32,44 @@
         <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="2" aria-label="Slide 3"></button>
     </div> --}}
     <div class="carousel-inner">
-        <div class="carousel-item active mb-2" data-bs-interval="5000">
+
+        @for ($i = 0; $i < 3; $i++)
+        @if ($i == 0)
+            <div class="carousel-item active mb-2" data-bs-interval="5000">
+        @elseif($i == 1)
+            <div class="carousel-item mb-2" data-bs-interval="4000">
+        @else
+            <div class="carousel-item  mb-2">
+        @endif
+        
             <div class="card mb-3 text-center">
-                <img src="https://source.unsplash.com/400x80/?{{ $posts[0]->category->name }}" class="card-img-top"
+                <img src="https://source.unsplash.com/400x80/?{{ $posts[$i]->category->name }}" class="card-img-top"
                     alt="{{ $posts[0]->category->name }}">
                 <div class="card-body">
-                    <h3 class="card-title"><a href="/post/{{ $posts[0]->slug }}"
-                            class="text-decoration-none">{{ $posts[0]->title }}</a></h3>
+                    <h3 class="card-title"><a href="/post/{{ $posts[$i]->slug }}"
+                            class="text-decoration-none">{{ $posts[$i]->title }}</a></h3>
                     <p>
                         <small class="text-muted">
-                            <p>By. <a href="/posts?author={{ $posts[0]->author->username }}"
-                                    class="text-decoration-none">{{ $posts[0]->author->name }}</a>
-                                in <a href="/posts?category={{ $posts[0]->category->slug }}"
-                                    class="text-decoration-none">{{ $posts[0]->category->name }}</a>
-                                {{ $posts[0]->created_at->diffForHumans() }}</p>
+                            <p>By. <a href="/posts?author={{ $posts[$i]->author->username }}"
+                                    class="text-decoration-none">{{ $posts[$i]->author->name }}</a>
+                                in <a href="/posts?category={{ $posts[$i]->category->slug }}"
+                                    class="text-decoration-none">{{ $posts[$i]->category->name }}</a>
+                                {{ $posts[$i]->created_at->diffForHumans() }}</p>
                         </small>
                     </p>
-                    <p class="card-text">{{ $posts[0]->excerpt }}</p>
+                    <p class="card-text">{{ $posts[$i]->excerpt }}</p>
 
-                    <a href="/post/{{ $posts[0]->slug }}" class="text-decoration-none btn btn-primary">Read more...</a>
+                    <a href="/post/{{ $posts[$i]->slug }}" class="text-decoration-none btn btn-primary">Read more...</a>
                     <p class="card-text">
 
                     </p>
                 </div>
             </div>
         </div>
+
+        @endfor
         
-        <div class="carousel-item mb-2" data-bs-interval="4000">
-            <div class="card mb-3 text-center">
-                <img src="https://source.unsplash.com/400x80/?{{ $posts[1]->category->name }}" class="card-img-top"
-                    alt="{{ $posts[1]->category->name }}">
-                <div class="card-body">
-                    <h3 class="card-title"><a href="/post/{{ $posts[1]->slug }}"
-                            class="text-decoration-none">{{ $posts[1]->title }}</a></h3>
-                    <p>
-                        <small class="text-muted">
-                            <p>By. <a href="/posts?author={{ $posts[1]->author->username }}"
-                                    class="text-decoration-none">{{ $posts[1]->author->name }}</a>
-                                in <a href="/categories/{{ $posts[1]->category->slug }}"
-                                    class="text-decoration-none">{{ $posts[1]->category->name }}</a>
-                                {{ $posts[1]->created_at->diffForHumans() }}</p>
-                        </small>
-                    </p>
-                    <p class="card-text">{{ $posts[1]->excerpt }}</p>
-
-                    <a href="/post/{{ $posts[1]->slug }}" class="text-decoration-none btn btn-primary">Read more...</a>
-                    <p class="card-text">
-
-                    </p>
-                </div>
-            </div>
-        </div>
-        <div class="carousel-item  mb-2">
-            <div class="card mb-3 text-center">
-                <img src="https://source.unsplash.com/400x80/?{{ $posts[2]->category->name }}" class="card-img-top"
-                    alt="{{ $posts[2]->category->name }}">
-                <div class="card-body">
-                    <h3 class="card-title"><a href="/post/{{ $posts[2]->slug }}"
-                            class="text-decoration-none">{{ $posts[2]->title }}</a></h3>
-                    <p>
-                        <small class="text-muted">
-                            <p>By. <a href="/posts?author={{ $posts[2]->author->username }}"
-                                    class="text-decoration-none">{{ $posts[2]->author->name }}</a>
-                                in <a href="/categories/{{ $posts[2]->category->slug }}"
-                                    class="text-decoration-none">{{ $posts[2]->category->name }}</a>
-                                {{ $posts[2]->created_at->diffForHumans() }}</p>
-                        </small>
-                    </p>
-                    <p class="card-text">{{ $posts[2]->excerpt }}</p>
-
-                    <a href="/post/{{ $posts[2]->slug }}" class="text-decoration-none btn btn-primary">Read more...</a>
-                    <p class="card-text">
-
-                    </p>
-                </div>
-            </div>
-        </div>
+        
     </div>
     <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleDark" data-bs-slide="prev">
         <span class="carousel-control-prev-icon" aria-hidden="true"></span>
@@ -196,6 +158,5 @@ alt="{{ $posts[0]->category->name }}">
 <div class="d-flex justify-content-end">
 {{ $posts->links() }}
 </div>
-
 
 @endsection
