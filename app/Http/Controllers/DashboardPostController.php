@@ -7,6 +7,7 @@ use App\Models\Category;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Cviebrock\EloquentSluggable\Services\SlugService;
 
 class DashboardPostController extends Controller
@@ -45,12 +46,20 @@ class DashboardPostController extends Controller
      */
     public function store(Request $request)
     {
+        // ddd($request);
+        // return  $request->file('image')->store('post-images');
+
         $validatedData = $request->validate([
             'title' => 'required|max:255',
             'slug' => 'required|unique:posts',
             'category_id' =>'required',
+            'image' => 'image|file|max:1024',
             'body' => 'required'
         ]);
+
+        if($request->file('image')){
+            $validatedData['image'] = $request->file('image')->store('post-images');
+        }
 
         $validatedData['user_id'] = auth()->user()->id;
 
@@ -101,14 +110,25 @@ class DashboardPostController extends Controller
         $rules = [
             'title' => 'required|max:255',
             'category_id' =>'required',
+            'image' => 'image|file|max:1024',
             'body' => 'required'
         ];
 
+        
         if($request->slug != $post->slug){
             $rules['slug'] = 'required|unique:posts';
         }
 
         $validatedData = $request->validate($rules);
+
+        if($request->file('image')){
+            if($request->oldImage){
+                // menghapus gambar
+                Storage::delete($request->oldImage);
+            }
+            // upload gambar
+            $validatedData['image'] = $request->file('image')->store('post-images');
+        }
 
         $validatedData['user_id'] = auth()->user()->id;
 
@@ -127,6 +147,12 @@ class DashboardPostController extends Controller
      */
     public function destroy(Post $post)
     {
+        if($post->image){
+            // menghapus gambar
+            Storage::delete($post->image);
+        }
+
+        // menghapus data di database dari id post
         Post::destroy($post->id);
         return redirect('/dashboard/posts')->with('success', 'Post has been deleted');
     }
